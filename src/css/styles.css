@@ -1,0 +1,550 @@
+/* ==========================================================================
+   Variables & Theme Setup
+   ========================================================================== */
+:root {
+  --bg: #eef0f2;        /* Noticeably softer, warmer light gray-stone background */
+  --surface: #f8fafc;   /* Soft off-white for cards/panels so it's not a glaring white */
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #cbd5e1;    /* Slightly adjusted for better definition against the new background */
+  --accent: #2563eb;
+  --accent-text: #ffffff;
+  --error: #dc2626;
+  --warning: #d97706;
+  --info: #2563eb;
+  --error-bg: #fef2f2;
+  --warning-bg: #fffbeb;
+  --info-bg: #eff6ff;
+  --good: #059669;
+  
+  /* Softer, more diffused shadows */
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+
+  --s1: 0.5rem;
+  --s2: 1rem;
+  --s3: 1.5rem;
+  --r: 10px;
+  
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[data-theme=dark] {
+  --bg: #090d16;
+  --surface: #111827;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --border: #1f2937;
+  --accent: #3b82f6;
+  --accent-text: #ffffff;
+  --error: #f87171;
+  --warning: #fbbf24;
+  --info: #60a5fa;
+  --error-bg: #451a03;
+  --warning-bg: #422006;
+  --info-bg: #1e3a8a;
+  --good: #34d399;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+}
+
+/* ==========================================================================
+   Base Styles & Resets
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Accessibility / Skip Links
+   ========================================================================== */
+.skip {
+  position: absolute;
+  left: -999px;
+}
+
+.skip:focus {
+  left: var(--s1);
+  top: var(--s1);
+  background: var(--surface);
+  padding: var(--s1);
+  z-index: 9;
+  box-shadow: var(--shadow-md);
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   Layout & Structure (Header, Main, Footer)
+   ========================================================================== */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s2) var(--s3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.top p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.top-actions {
+  display: flex;
+  gap: var(--s2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.privacy {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: var(--bg);
+  color: var(--muted);
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--s3) var(--s2);
+}
+
+h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 var(--s1);
+  letter-spacing: -0.01em;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: var(--s3);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+  margin-top: var(--s3);
+}
+
+/* ==========================================================================
+   Panels, Containers & Drop Zones
+   ========================================================================== */
+.panel,
+.drop {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: var(--s2);
+  margin-bottom: var(--s2);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease;
+}
+
+.panel:hover {
+  box-shadow: var(--shadow);
+}
+
+.drop {
+  border: 2px dashed var(--border);
+  text-align: center;
+  padding: 3.5rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.drop:hover {
+  border-color: var(--muted);
+}
+
+.drop.drag {
+  border-color: var(--accent);
+  background: var(--info-bg);
+  transform: scale(0.995);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: var(--s2);
+}
+
+@media (max-width: 800px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Flex & Grid Utilities
+   ========================================================================== */
+.row {
+  display: flex;
+  gap: var(--s1);
+  align-items: center;
+  justify-content: center;
+}
+
+.wrap {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--s2);
+  margin: var(--s2) 0;
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin: var(--s2) 0;
+  padding: var(--s2);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==========================================================================
+   Form Controls (Buttons, Inputs, Selects, Labels)
+   ========================================================================== */
+.btn {
+  font: inherit;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--bg);
+  border-color: var(--muted);
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+  box-shadow: 0 2px 4px rgb(37 99 235 / 0.25);
+}
+
+.btn.primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+input,
+select {
+  font: inherit;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  max-width: 100%;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15);
+  outline: none;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+label.check {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.filters {
+  margin-bottom: var(--s1);
+  align-items: flex-end;
+}
+
+/* ==========================================================================
+   Cards, Badges & Status Elements
+   ========================================================================== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--s2);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: var(--s2);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.card-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 0.2rem;
+  letter-spacing: -0.02em;
+}
+
+.card.good .card-value { color: var(--good); }
+.card.mid .card-value { color: var(--warning); }
+.card.bad .card-value { color: var(--error); }
+
+.status {
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+
+.status.error { color: var(--error); background: var(--error-bg); border-color: color-mix(in srgb, var(--error) 30%, transparent); }
+.status.warn { color: var(--warning); background: var(--warning-bg); border-color: color-mix(in srgb, var(--warning) 30%, transparent); }
+.status.ok { color: var(--good); background: color-mix(in srgb, var(--good) 10%, var(--surface)); border-color: color-mix(in srgb, var(--good) 30%, transparent); }
+
+.badge {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 99px;
+  font-weight: 700;
+}
+
+.badge.error { background: var(--error-bg); color: var(--error); }
+.badge.warning { background: var(--warning-bg); color: var(--warning); }
+.badge.info { background: var(--info-bg); color: var(--info); }
+
+/* ==========================================================================
+   Lists, Findings & Details
+   ========================================================================== */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 380px;
+  overflow: auto;
+}
+
+.finding {
+  display: flex;
+  gap: var(--s1);
+  width: 100%;
+  align-items: center;
+  text-align: left;
+  font: inherit;
+  padding: 0.75rem;
+  border: 1px solid transparent;
+  border-bottom-color: var(--border);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.finding:hover,
+.finding.selected {
+  background: var(--surface);
+  border-color: var(--accent);
+  border-radius: 6px;
+}
+
+.f-title {
+  flex: 1;
+  font-weight: 500;
+}
+
+.f-count {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.detail {
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: var(--s2);
+  overflow-wrap: anywhere;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.chip {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0 0.25rem 0.25rem 0;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.chip:hover {
+  background: var(--border);
+}
+
+.inspector {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* ==========================================================================
+   Tables & Data Grids
+   ========================================================================== */
+.scroll {
+  overflow: auto;
+  max-width: 100%;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  background: var(--surface);
+}
+
+.tall {
+  max-height: 460px;
+}
+
+table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 2px solid var(--border);
+  backdrop-filter: blur(8px);
+}
+
+.cell-error { background: var(--error-bg); }
+.cell-warning { background: var(--warning-bg); }
+.cell-info { background: var(--info-bg); }
+
+td {
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+td:hover {
+  background: var(--bg);
+}
+
+tr.flash td,
+tr.flash th {
+  outline: 2px solid var(--accent);
+}
+
+/* ==========================================================================
+   Helpers, Text Utilities & Media Queries
+   ========================================================================== */
+.note {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.warn { color: var(--warning); font-weight: 500; }
+.empty { color: var(--muted); font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

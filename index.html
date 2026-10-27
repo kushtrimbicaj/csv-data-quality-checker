@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSV Data Quality Checker</title>
+<meta name="description" content="Find missing values, duplicates, inconsistencies and invalid emails in a CSV file. Runs entirely in your browser.">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./src/css/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div><h1>CSV Data Quality Checker</h1><p>Detect missing values, duplicates, inconsistencies and invalid emails in seconds.</p></div>
+  <div class="top-actions"><span class="privacy" title="Files are parsed and analysed in this tab only">🔒 Your data never leaves this browser</span>
+  <button id="themeToggle" class="btn" type="button" aria-pressed="false">☾ Dark</button></div>
+</header>
+<main id="main">
+<p id="status" class="status" role="status" aria-live="polite">Ready. Choose or drop a CSV file.</p>
+<section id="upload" aria-labelledby="upTitle">
+  <div id="dropzone" class="drop" tabindex="0" role="button" aria-label="Drop a CSV file here or press Enter to browse">
+    <h2 id="upTitle">Drop a CSV file here</h2><p>Supported: .csv (UTF-8, comma, semicolon or tab delimited) · up to 25 MB</p>
+    <div class="row"><button id="browse" class="btn primary" type="button">Browse files</button><button id="sample" class="btn" type="button">Try a sample CSV</button></div>
+    <input id="fileInput" type="file" accept=".csv,.tsv,.txt,text/csv" hidden>
+  </div>
+</section>
+<section id="workspace" hidden>
+  <div class="bar"><span id="fileInfo"></span><button id="remove" class="btn" type="button">Remove file</button></div>
+  <details class="panel" open><summary>Import &amp; analysis settings</summary>
+    <div class="grid">
+      <label class="check"><input id="hasHeader" type="checkbox" checked> First row contains headers</label>
+      <label>Delimiter <select id="delimiter"><option value="auto">Auto-detect</option><option value=",">Comma</option><option value=";">Semicolon</option><option value="&#9;">Tab</option></select></label>
+      <label class="check"><input id="useTokens" type="checkbox" checked> Treat these tokens as missing</label>
+      <label>Missing tokens (comma-separated) <input id="tokens" type="text"></label>
+      <label>High-missing threshold (%) <input id="threshold" type="number" min="1" max="100" value="50"></label>
+      <label>Ignore columns in duplicate check <select id="ignoreCols" multiple size="3"></select></label>
+    </div>
+    <fieldset><legend>Checks</legend><div id="checks" class="row wrap"></div></fieldset>
+    <div class="row"><button id="rerun" class="btn primary" type="button">Re-run analysis</button><button id="resetSettings" class="btn" type="button">Reset settings</button></div>
+  </details>
+  <div id="summary" class="cards"></div>
+  <p class="note">Score = 100 × (1 − flagged cells ÷ total cells). A cell counts once however many findings touch it; severity labels do not affect the score. Unavailable (N/A) when there are no data rows or columns.</p>
+  <section class="panel" aria-labelledby="fT"><h2 id="fT">Findings</h2>
+    <div class="row wrap filters">
+      <label>Severity <select id="sevFilter"><option value="">All</option><option>error</option><option>warning</option><option>info</option></select></label>
+      <label>Type <select id="typeFilter"></select></label><label>Column <select id="colFilter"></select></label>
+      <label>Affected row <input id="rowFilter" type="number" min="1" placeholder="e.g. 5"></label>
+    </div>
+    <div class="split"><ul id="findings" class="list"></ul><div id="detail" class="detail"></div></div>
+  </section>
+  <section class="panel" aria-labelledby="cT"><h2 id="cT">Column quality</h2><div class="scroll"><table id="columns"></table></div><p class="note">* hover the type for uncertainty notes. Type inference is heuristic; identifier-like columns are treated as text.</p>
+  </section>
+  <section class="panel" aria-labelledby="pT"><h2 id="pT">Data preview</h2>
+    <div class="row wrap filters"><label>Search <input id="search" type="search" placeholder="Find a value"></label><label>Go to row <input id="gotoRow" type="number" min="1"></label>
+      <button id="prev" class="btn" type="button">‹ Prev</button><span id="pageInfo"></span><button id="next" class="btn" type="button">Next ›</button></div>
+    <div class="scroll tall"><table id="preview"></table></div>
+    <pre id="inspector" class="inspector" aria-live="polite">Click a cell to inspect its exact original value.</pre>
+  </section>
+  <section class="panel" aria-labelledby="eT"><h2 id="eT">Export</h2>
+    <div class="row wrap"><button id="expJson" class="btn" type="button">Download analysis report (JSON)</button><button id="expFindings" class="btn" type="button">Download findings (CSV)</button></div>
+    <fieldset><legend>Optional cleaned copy (original is never modified)</legend>
+      <label class="check"><input id="optTrim" type="checkbox"> Trim leading/trailing whitespace</label>
+      <label class="check"><input id="optCase" type="checkbox"> Normalize capitalization to the most common variant</label>
+      <pre id="cleanPreview" class="inspector"></pre>
+      <button id="expClean" class="btn" type="button">Download cleaned CSV</button>
+      <p class="note">Detected issues are only suggestions; only the options ticked above are applied. Values stay text, so leading zeros survive. Values starting with = + - @ are prefixed with ' to prevent spreadsheet formula injection.</p>
+    </fieldset>
+  </section>
+</section>
+</main>
+<footer>Analysis runs locally · no uploads · no tracking</footer>
+<script type="module" src="./src/js/main.js"></script>
+</body></html>
